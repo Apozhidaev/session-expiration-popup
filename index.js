@@ -43,26 +43,28 @@ class SessionExpirationPopup extends HTMLElement {
     popup.style.backgroundColor = "var(--se-bg-color, #1166e5)";
     popup.style.color = "var(--se-text-color, #fff)";
     popup.style.borderRadius = "0 0 0.25rem 0.25rem";
-    popup.style.padding = "0 1rem 1rem";
+    popup.style.padding = "1rem";
     popup.style.lineHeight = 1;
     popup.style.fontSize = "1rem";
     popup.style.fontFamily = "sans-serif"
 
     const title = document.createElement("h2");
-    title.style.margin = "1rem 0 0.75rem";
+    title.style.margin = "0.25rem 0 0";
     title.style.fontSize = "2rem";
+    title.style.fontWeight = 600;
     title.append("Your session expired");
     popup.append(title);
 
     const subtitle = document.createElement("div");
     subtitle.style.fontWeight = 500;
+    subtitle.style.marginTop = "0.75rem";
     subtitle.append("Please note that all unsaved data will be lost. ");
 
     const link = document.createElement("a");
     link.style.color = "inherit";
     link.style.fontWeight = 600;
     link.style.textDecoration = "underline";
-    link.href = "#";
+    link.href = "/";
     link.append("Click here");
     link.onclick = (e) => {
       e.preventDefault();
