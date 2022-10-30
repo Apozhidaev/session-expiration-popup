@@ -10,10 +10,6 @@ const deleteAllCookies = () => {
 };
 
 class SessionExpirationPopup extends HTMLElement {
-  static get observedAttributes() {
-    return ["session-check-url", "interval", "force-show", "clear-cookies"];
-  }
-
   constructor() {
     super();
     this.expired = false;
@@ -82,6 +78,10 @@ class SessionExpirationPopup extends HTMLElement {
     this.root.append(popup);
   }
 
+  static get observedAttributes() {
+    return ["session-check-url", "interval", "force-show", "clear-cookies"];
+  }
+
   connectedCallback() {
     window.addEventListener("keydown", this.keydownHendler, true);
   }
@@ -100,19 +100,29 @@ class SessionExpirationPopup extends HTMLElement {
     }
   }
 
+  get clearCookies() {
+    const attr = this.getAttribute("clear-cookies");
+    return (!attr && this.hasAttribute("clear-cookies")) || String(attr) === "true";
+  }
+
+  get forceShow() {
+    const attr = this.getAttribute("force-show");
+    return (!attr && this.hasAttribute("force-show")) || String(attr) === "true";
+  }
+
   get showPopup() {
-    return this.expired || this.getAttribute("force-show") === "true";
+    return this.expired || this.forceShow;
   }
 
   keydownHendler(e) {
-    e.preventDefault();
     if (e.key === "Escape" && this.showPopup) {
+      e.preventDefault();
       this.reload();
     }
   }
 
   reload() {
-    if (this.getAttribute("clear-cookies") === "true") {
+    if (this.clearCookies) {
       deleteAllCookies();
     }
     window.location.reload();
