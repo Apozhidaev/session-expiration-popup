@@ -1,0 +1,9 @@
+{
+  "name": "session-expiration-popup",
+  "version": "1.0.0",
+  "main": "index.js",
+  "module": "index.js",
+  "repository": "git@github.com:Apozhidaev/session-expiration-popup.git",
+  "author": "Alexander Pozhidaev <alexander.pozhidaev@gmail.com>",
+  "license": "MIT"
+}
