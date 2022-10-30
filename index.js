@@ -14,8 +14,32 @@ class SessionExpirationPopup extends HTMLElement {
     super();
     this.expired = false;
     this.keydownHendler = this.keydownHendler.bind(this);
+  }
 
-    this.root = new DocumentFragment();
+  static get observedAttributes() {
+    return ["session-check-url", "interval", "force-show", "clear-cookies"];
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener("keydown", this.keydownHendler, true);
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === "force-show") {
+      this.render();
+    }
+
+    if (["session-check-url", "interval"].includes(name)) {
+      this.sessionChecking();
+    }
+  }
+
+  get root() {
+    if(this._root) {
+      return this._root;
+    }
+
+    this._root = new DocumentFragment();
 
     const overlay = document.createElement("div");
     overlay.style.position = "fixed";
@@ -26,7 +50,7 @@ class SessionExpirationPopup extends HTMLElement {
     overlay.style.left = 0;
     overlay.style.opacity = 0.25;
     overlay.style.backgroundColor = "#000";
-    this.root.append(overlay);
+    this._root.append(overlay);
 
     const popup = document.createElement("div");
     popup.style.position = "fixed";
@@ -75,29 +99,9 @@ class SessionExpirationPopup extends HTMLElement {
     subtitle.append(" to login and continue work with application.");
 
     popup.append(subtitle);
-    this.root.append(popup);
-  }
+    this._root.append(popup);
 
-  static get observedAttributes() {
-    return ["session-check-url", "interval", "force-show", "clear-cookies"];
-  }
-
-  connectedCallback() {
-    window.addEventListener("keydown", this.keydownHendler, true);
-  }
-
-  disconnectedCallback() {
-    window.removeEventListener("keydown", this.keydownHendler, true);
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (name === "force-show") {
-      this.render();
-    }
-
-    if (["session-check-url", "interval"].includes(name)) {
-      this.sessionChecking();
-    }
+    return this._root;
   }
 
   get clearCookies() {
@@ -115,8 +119,8 @@ class SessionExpirationPopup extends HTMLElement {
   }
 
   keydownHendler(e) {
-    if (e.key === "Escape" && this.showPopup) {
-      e.preventDefault();
+    e.preventDefault();
+    if (e.key === "Escape") {
       this.reload();
     }
   }
@@ -153,7 +157,9 @@ class SessionExpirationPopup extends HTMLElement {
   }
 
   render() {
+    window.removeEventListener("keydown", this.keydownHendler, true);
     if (this.showPopup) {
+      window.addEventListener("keydown", this.keydownHendler, true);
       this.append(this.root);
     } else {
       this.innerHTML = "";
