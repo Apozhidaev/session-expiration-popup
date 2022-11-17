@@ -12,6 +12,7 @@ const deleteAllCookies = () => {
 class SessionExpirationPopup extends HTMLElement {
   constructor() {
     super();
+    this._shadowRoot = this.attachShadow({ mode: "open" });
     this.expired = false;
     this.keydownHendler = this.keydownHendler.bind(this);
   }
@@ -35,7 +36,7 @@ class SessionExpirationPopup extends HTMLElement {
   }
 
   get root() {
-    if(this._root) {
+    if (this._root) {
       return this._root;
     }
 
@@ -66,7 +67,7 @@ class SessionExpirationPopup extends HTMLElement {
     popup.style.padding = "1rem";
     popup.style.lineHeight = 1;
     popup.style.fontSize = "1rem";
-    popup.style.fontFamily = "sans-serif"
+    popup.style.fontFamily = "sans-serif";
 
     const title = document.createElement("h2");
     title.style.margin = "0.25rem 0 0";
@@ -106,12 +107,16 @@ class SessionExpirationPopup extends HTMLElement {
 
   get clearCookies() {
     const attr = this.getAttribute("clear-cookies");
-    return (!attr && this.hasAttribute("clear-cookies")) || String(attr) === "true";
+    return (
+      (!attr && this.hasAttribute("clear-cookies")) || String(attr) === "true"
+    );
   }
 
   get forceShow() {
     const attr = this.getAttribute("force-show");
-    return (!attr && this.hasAttribute("force-show")) || String(attr) === "true";
+    return (
+      (!attr && this.hasAttribute("force-show")) || String(attr) === "true"
+    );
   }
 
   get showPopup() {
@@ -129,7 +134,16 @@ class SessionExpirationPopup extends HTMLElement {
     if (this.clearCookies) {
       deleteAllCookies();
     }
-    window.location.reload();
+
+    const reloadEvent = new CustomEvent("reload", {
+      bubbles: false,
+      cancelable: true,
+    });
+    this.dispatchEvent(reloadEvent);
+
+    if (!reloadEvent.defaultPrevented) {
+      window.location.reload();
+    }
   }
 
   sessionChecking() {
@@ -160,9 +174,10 @@ class SessionExpirationPopup extends HTMLElement {
     window.removeEventListener("keydown", this.keydownHendler, true);
     if (this.showPopup) {
       window.addEventListener("keydown", this.keydownHendler, true);
-      this.append(this.root);
+      this._shadowRoot.append(this.root);
     } else {
-      this.innerHTML = "";
+      this._shadowRoot.innerHTML = "";
+      delete this._root;
     }
   }
 }

@@ -7,10 +7,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <script type="application/javascript" src="./index.js"></script>
+  <style>
+    :root {
+      --se-bg-color: #db2777;
+      --se-text-color: #fff;
+    }
+  </style>
 </head>
 
 <body>
-  <session-expiration-popup session-check-url="/api/session" interval="60000" force-show clear-cookies>
+  <session-expiration-popup id="popup" session-check-url="/api/session" interval="60000" force-show clear-cookies>
   </session-expiration-popup>
 </body>
 
