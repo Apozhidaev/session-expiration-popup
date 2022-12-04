@@ -18,7 +18,13 @@ class SessionExpirationPopup extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["session-check-url", "interval", "force-show", "clear-cookies"];
+    return [
+      "redirect-to",
+      "session-check-url",
+      "interval",
+      "force-show",
+      "clear-cookies",
+    ];
   }
 
   disconnectedCallback() {
@@ -49,8 +55,8 @@ class SessionExpirationPopup extends HTMLElement {
     overlay.style.right = 0;
     overlay.style.bottom = 0;
     overlay.style.left = 0;
-    overlay.style.opacity = 0.25;
-    overlay.style.backgroundColor = "#000";
+    overlay.style.opacity = "var(--se-overlay-opacity, 0.25)";
+    overlay.style.backgroundColor = "var(--se-overlay-color, #000)";
     this._root.append(overlay);
 
     const popup = document.createElement("div");
@@ -60,7 +66,7 @@ class SessionExpirationPopup extends HTMLElement {
     popup.style.left = "50%";
     popup.style.width = "75%";
     popup.style.transform = "translate(-50%)";
-    popup.style.opacity = 0.9;
+    popup.style.opacity = "var(--se-opacity, 0.9)";
     popup.style.backgroundColor = "var(--se-bg-color, #1166e5)";
     popup.style.color = "var(--se-text-color, #fff)";
     popup.style.borderRadius = "0 0 0.25rem 0.25rem";
@@ -142,7 +148,12 @@ class SessionExpirationPopup extends HTMLElement {
     this.dispatchEvent(reloadEvent);
 
     if (!reloadEvent.defaultPrevented) {
-      window.location.reload();
+      const redirectTo = this.getAttribute("redirect-to");
+      if (redirectTo) {
+        window.location.href = redirectTo;
+      } else {
+        window.location.reload();
+      }
     }
   }
 

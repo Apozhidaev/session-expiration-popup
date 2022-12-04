@@ -9,6 +9,7 @@ declare namespace React {
 
 interface SessionExpirationPopupHTMLAttributes<T>
   extends React.HTMLAttributes<T> {
+  ["redirect-to"]?: string;
   ["session-check-url"]?: string;
   interval?: string | number;
   ["force-show"]?: "true" | "false" | boolean;
