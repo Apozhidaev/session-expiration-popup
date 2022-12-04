@@ -1,6 +1,7 @@
-# Session expiration popup
+# Session Expiration Popup
 
 This component is used to indicate that user session has expired.
+
 
 
 ### Attributes
@@ -9,7 +10,7 @@ This component is used to indicate that user session has expired.
 * **session-check-url** - heartbeat url to check user session against.
 * **interval** - interval of check requests in ms.
 * **force-show** - force popup to be shown no matter session is expired or not.
-* **clear-cookies** - clear the cookies before going to the redirect url or reload the page if the **redirect-to** is empty
+* **clear-cookies** - clear cookies before going to the redirect url or reload the page (if **redirect-to** is empty)
 
 
 ### How to Use
