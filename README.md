@@ -2,7 +2,8 @@
 
 This component is used to indicate that user session has expired.
 
-Attributes:
+
+### Attributes
 
 * **redirect-to** - redirect url to go after clicking on the popup or press ESC
 * **session-check-url** - heartbeat url to check user session against.
@@ -10,7 +11,20 @@ Attributes:
 * **force-show** - force popup to be shown no matter session is expired or not.
 * **clear-cookies** - clear the cookies before going to the redirect url or reload the page if the **redirect-to** is empty
 
-Example:
+
+### How to Use
+
+Step 1.
+```bash
+npm i session-expiration-popup
+```
+
+Step 2.
+```javascript
+import 'session-expiration-popup'
+```
+
+Step 3.
 ```html
 <style>
   :root {
