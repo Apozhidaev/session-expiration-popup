@@ -27,3 +27,7 @@ declare namespace JSX {
     ["session-expiration-popup"]: SessionExpirationPopupProps;
   }
 }
+
+interface Window {
+  __SESSION_EXPIRATION_POPUP_ELEMENT_NAME__?: string;
+}
