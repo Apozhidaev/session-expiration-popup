@@ -193,8 +193,16 @@ class SessionExpirationPopup extends HTMLElement {
   }
 }
 
-const customElementName =
-  window.__SESSION_EXPIRATION_POPUP_ELEMENT_NAME__ ||
-  "session-expiration-popup";
+function registerElement() {
+  try {
+    customElements.define(
+      window.__SESSION_EXPIRATION_POPUP_ELEMENT_NAME__ ||
+        "session-expiration-popup",
+      SessionExpirationPopup
+    );
+  } catch (error) {
+    console.error(error);
+  }
+}
 
-customElements.define(customElementName, SessionExpirationPopup);
+registerElement();
